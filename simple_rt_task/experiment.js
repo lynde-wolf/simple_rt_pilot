@@ -589,11 +589,22 @@ simple_rt_pilot_experiment.push(exitFullscreen);
 var simple_rt_pilot_init = function () {};
 
 // Expose to window so expfactory's runtime can find the timeline by
-// name regardless of how it loads experiment.js (script tag vs IIFE
-// wrapper vs module). Deployed expfactory experiments achieve this
-// by declaring the variable WITHOUT `var` (implicit global); we keep
-// `var` for cleanliness and attach explicitly here.
+// name regardless of which convention it uses to derive the lookup key
+// (exp_id from config.json vs the deployment folder name on disk) and
+// regardless of how it loads experiment.js (script tag vs IIFE wrapper).
+// Deployed expfactory experiments rely on folder name == exp_id so this
+// distinction never surfaces; ours has folder=simple_rt_task and
+// exp_id=simple_rt_pilot, so we publish both aliases.
 if (typeof window !== 'undefined') {
   window.simple_rt_pilot_experiment = simple_rt_pilot_experiment;
   window.simple_rt_pilot_init = simple_rt_pilot_init;
+  window.simple_rt_task_experiment = simple_rt_pilot_experiment;
+  window.simple_rt_task_init = simple_rt_pilot_init;
+  // Also define addID as a no-op in case expfactory's deployment_variables
+  // on_trial_finish hook fires before our shim is loaded.
+  if (typeof window.addID !== 'function') {
+    window.addID = function (id) {
+      return function (data) { if (data) data.exp_id = id; };
+    };
+  }
 }

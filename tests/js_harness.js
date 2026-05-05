@@ -89,6 +89,8 @@ switch (cmd.fn) {
       FIXATION_MIN_MS,
       FIXATION_MAX_MS,
       FIXATION_STEP_MS,
+      FIXATION_MEAN_MS,
+      shapeStims,
       group_index,
       expID,
     };

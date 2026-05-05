@@ -58,9 +58,13 @@ class TestExperimentVariables:
         assert self.vars['rtThresh'] == 1000
 
     def test_fixation_window(self):
-        assert self.vars['FIXATION_MIN_MS'] == 250
-        assert self.vars['FIXATION_MAX_MS'] == 1000
+        assert self.vars['FIXATION_MIN_MS'] == 1000
+        assert self.vars['FIXATION_MAX_MS'] == 5000
         assert self.vars['FIXATION_STEP_MS'] == 50
+        assert self.vars['FIXATION_MEAN_MS'] == 2000
+
+    def test_shape_stims(self):
+        assert sorted(self.vars['shapeStims']) == ['square', 'triangle']
 
     def test_default_group_index(self):
         assert self.vars['group_index'] == 1
@@ -79,25 +83,31 @@ class TestSampleFixationDuration:
         return call_js('sampleFixationDuration', 2000)
 
     def test_within_bounds(self, samples):
-        assert all(250 <= s <= 1000 for s in samples)
+        assert all(1000 <= s <= 5000 for s in samples)
 
     def test_on_50ms_grid(self, samples):
         assert all(s % 50 == 0 for s in samples)
 
     def test_covers_range(self, samples):
-        # Over 2000 draws we should hit both extremes plus several middle values
-        assert min(samples) <= 300
-        assert max(samples) >= 900
-        assert len(set(samples)) >= 8
+        # Over 2000 draws we should hit values across most of the range.
+        assert min(samples) <= 1100
+        assert max(samples) >= 4000
+        assert len(set(samples)) >= 20
 
     def test_decaying_distribution(self, samples):
         # Truncated decaying exponential: more mass near MIN than near MAX.
-        below_500 = sum(1 for s in samples if s <= 500)
-        above_500 = sum(1 for s in samples if s > 500)
-        assert below_500 > above_500, (
-            f'Distribution not decaying: {below_500} below 500ms, '
-            f'{above_500} above'
+        below_2000 = sum(1 for s in samples if s <= 2000)
+        above_2000 = sum(1 for s in samples if s > 2000)
+        assert below_2000 > above_2000, (
+            f'Distribution not decaying: {below_2000} below 2000ms, '
+            f'{above_2000} above'
         )
+
+    def test_mean_close_to_target(self, samples):
+        # Mean should be ~2000 ms (target). Allow wide tolerance for sampling noise
+        # and the floor-snap bias (which pulls mean slightly down).
+        mean = sum(samples) / len(samples)
+        assert 1700 <= mean <= 2100, f'Mean {mean} far from target 2000'
 
 
 # ---------------------------------------------------------------

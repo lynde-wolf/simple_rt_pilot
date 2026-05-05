@@ -110,12 +110,17 @@ document.getElementById('selector-form').addEventListener('submit', function (e)
 
   // Point images at the local images/ folder
   pathSource = 'images/';
-  preFileType = "<img class='center' src='" + pathSource;
-  postFileType = ".png'>";
-  images = [pathSource + 'triangle.png'];
+  images = [pathSource + 'triangle.png', pathSource + 'square.png'];
 
   var jsPsych = initJsPsych({
     display_element: 'jspsych-target',
+    on_trial_start: function (trial) {
+      window._currentTrialId = (trial.data && trial.data.trial_id) || null;
+      window._currentTrialStartMs = performance.now();
+    },
+    on_trial_finish: function () {
+      window._currentTrialId = null;
+    },
     on_finish: function () {
       jsPsych.data.displayData();
     },

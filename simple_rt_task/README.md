@@ -4,10 +4,10 @@ A baseline reaction-time task: a triangle appears after a jittered non-aging for
 
 ## Trial structure
 
-| Event    | Duration (ms)                                            |
-| -------- | -------------------------------------------------------- |
-| Fixation | 250–1000, truncated decaying exponential, 50 ms grid     |
-| Triangle | 1000 (response logged any time during this window; trial does not end on response) |
+| Event    | Duration (ms)                                                                |
+| -------- | ---------------------------------------------------------------------------- |
+| Fixation | 1000–5000, truncated decaying exponential, 50 ms grid, mean 2000 (`Math.floor` snap) |
+| Shape    | 1000. Triangle or diamond (square rotated 45°), randomly per trial. Spacebar = any shape; trial does not end on response |
 
 ## Blocks
 

@@ -23,10 +23,14 @@ Each trial has two events:
 
 | Event    | Duration                                                           |
 | -------- | ------------------------------------------------------------------ |
-| Fixation | jittered foreperiod **250–1000 ms**, truncated decaying exponential on a 50 ms grid (mean ≈ 500 ms) |
-| Triangle | **1000 ms** fixed; spacebar response logged any time during this window; the trial does not end on response |
+| Fixation | jittered foreperiod **1000–5000 ms**, truncated decaying exponential on a 50 ms grid, mean 2000 ms (`Math.floor` snap) |
+| Shape    | **1000 ms** fixed. A triangle or a diamond appears (the diamond is `square.png` rotated 45°), randomly chosen per trial. Spacebar is the response for **any** shape; the trial does not end on response |
 
-The non-aging foreperiod makes triangle onset unpredictable.
+The non-aging foreperiod makes shape onset unpredictable.
+
+## Errant key logging
+
+A document-level `keydown` listener captures every key press for the entire session — including during fixation, ITI, instructions, and the attention check — annotated with the active `trial_id` and time-in-trial. The full log is serialized to `all_keypresses` (and `total_keypress_count`) on the experiment data object at the end of the run.
 
 ## Block structure
 

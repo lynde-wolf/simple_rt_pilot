@@ -171,12 +171,26 @@ var images = [pathSource + 'triangle.png', pathSource + 'square.png'];
 
 // Shape stimuli. The square image is rotated 45deg via inline transform
 // so it visually presents as a diamond.
+//
+// Visual-size matching:
+//   - square is rendered 160x160 then rotated 45deg → visible bbox ≈ 226x226
+//   - triangle.png has been cropped tight to the white pixels, so we render
+//     it directly at 226x226 to give it the same visible bbox and (since
+//     both shapes fill half their bbox by geometry) approximately the same
+//     white pixel area as the diamond.
 var shapeStims = ['triangle', 'square'];
+const SQUARE_SIZE_PX = 160;
+const TRIANGLE_SIZE_PX = 226;
 
 function buildShapeHTML(shape) {
-  var rotate = shape === 'square' ? 'transform: rotate(45deg);' : '';
-  return "<img class='center' style='" + rotate + "' src='" +
-    pathSource + shape + ".png'>";
+  if (shape === 'square') {
+    return "<img class='center' style='width:" + SQUARE_SIZE_PX +
+      'px;height:' + SQUARE_SIZE_PX + "px;transform: rotate(45deg);' src='" +
+      pathSource + "square.png'>";
+  }
+  return "<img class='center' style='width:" + TRIANGLE_SIZE_PX +
+    'px;height:' + TRIANGLE_SIZE_PX + "px;' src='" +
+    pathSource + "triangle.png'>";
 }
 
 // Track the shape selected for the most recently rendered stimulus so
@@ -470,6 +484,12 @@ var endBlock = {
   stimulus: endText,
   choices: ['Enter'],
   post_trial_gap: 0,
+  on_start: function () {
+    jsPsych.data.addProperties({
+      all_keypresses: JSON.stringify(allKeyPresses),
+      total_keypress_count: allKeyPresses.length,
+    });
+  },
 };
 
 var testKeyReminderBlock = {

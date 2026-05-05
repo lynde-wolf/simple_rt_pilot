@@ -90,7 +90,5 @@ img.center {
   margin: auto;
 }
 
-#jspsych-stop-signal-stimulus img.center {
-  height: 160px;
-  width: 160px;
-}
+/* Per-shape sizing is set inline by experiment.js (buildShapeHTML)
+   so the rendered triangle and diamond have matching bounding boxes. */

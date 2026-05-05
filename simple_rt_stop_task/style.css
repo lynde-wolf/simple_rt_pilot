@@ -1,0 +1,94 @@
+/*******************************************************/
+/*********    RDoC/Network Default CSS Styles    *******/
+/*******************************************************/
+
+body {
+  background-color: #707070;
+  color: white;
+}
+
+.fb_box {
+  width: 35vw;
+  height: 20vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -175%);
+}
+
+.picture_box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin-right: 0%;
+  background-color: none;
+  text-align: center;
+}
+
+.fixation {
+  text-align: center;
+  font-size: 60px;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  color: white;
+}
+
+.large-centerbox {
+  width: 50vw;
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.bigbox {
+  width: 100%;
+  margin: auto;
+  min-height: 100%;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  margin-right: 0%;
+  background-color: none;
+  text-align: center;
+}
+
+.instructBox {
+  width: 80vw;
+  height: 10vw;
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  margin-right: 0%;
+  transform: translate(-50%, -50%);
+  background-color: none;
+  font-size: 24px;
+}
+
+.prompt_box {
+  width: 75%;
+  height: 20%;
+  position: absolute;
+  top: 15%;
+  left: 20%;
+  transform: translate(-50%, -45%);
+  margin-right: 0%;
+  background-color: none;
+  text-align: center;
+}
+
+img.center {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+/* Per-shape sizing is set inline by experiment.js (buildShapeHTML)
+   so the rendered triangle and diamond have matching bounding boxes. */

@@ -2,7 +2,12 @@
 // Receives a JSON command on argv[2] and prints JSON results to stdout.
 
 globalThis.window = { efVars: { group_index: 1 } };
-globalThis.document = { body: {} };
+globalThis.document = {
+  body: {},
+  currentScript: null,
+  getElementsByTagName: function () { return []; },
+  addEventListener: function () {},
+};
 globalThis.performance = { now: () => Date.now() };
 globalThis.navigator = { userAgent: 'node', languages: [], plugins: [] };
 

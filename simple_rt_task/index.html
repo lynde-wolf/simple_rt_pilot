@@ -108,9 +108,8 @@ document.getElementById('selector-form').addEventListener('submit', function (e)
   window.efVars = { group_index: gi };
   if (typeof group_index !== 'undefined') group_index = gi;
 
-  // Point images at the local images/ folder
-  pathSource = 'images/';
-  images = [pathSource + 'triangle.png', pathSource + 'square.png'];
+  // pathSource is resolved at experiment.js load time from
+  // document.currentScript.src, so it works under file:// without override.
 
   var jsPsych = initJsPsych({
     display_element: 'jspsych-target',

@@ -161,12 +161,25 @@ var practiceCount = 0;
 var testCount = 0;
 var shapeRtTestCount = 0;
 
-/* Image paths */
-// local
-// var pathSource = '/static/experiments/simple_rt_pilot/images/';
-// expfactory deploy
-var pathSource =
-  '/deployment/repo/simple_rt_pilot/REPLACE_WITH_COMMIT_SHA/simple_rt_task/images/';
+/* Image paths — resolved dynamically from the URL experiment.js was loaded
+   from, so this works under any deploy (local file://, /static/experiments/<folder>/,
+   /deployment/repo/<repo>/<sha>/<folder>/, etc.) without hardcoding a folder name. */
+var pathSource = (function () {
+  if (typeof document === 'undefined') return 'images/';
+  var script = document.currentScript;
+  if (!script) {
+    var scripts = document.getElementsByTagName('script');
+    for (var i = scripts.length - 1; i >= 0; i--) {
+      if (scripts[i].src && scripts[i].src.indexOf('experiment.js') !== -1) {
+        script = scripts[i];
+        break;
+      }
+    }
+  }
+  return script && script.src
+    ? script.src.replace(/[^/]*$/, '') + 'images/'
+    : 'images/';
+})();
 var images = [pathSource + 'triangle.png', pathSource + 'square.png'];
 
 // Shape stimuli. The square image is rotated 45deg via inline transform

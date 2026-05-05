@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Simple RT Pilot - Local Test</title>
+  <script src="https://unpkg.com/jspsych@7.3.4"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-instructions@1.1.4"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-html-button-response@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.3"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-fullscreen@1.2.1"></script>
+  <script src="https://unpkg.com/@jspsych/plugin-call-function@1.1.3"></script>
+  <link rel="stylesheet" href="https://unpkg.com/jspsych@7.3.4/css/jspsych.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="task-selector" style="font-family: sans-serif; padding: 40px; max-width: 600px; margin: 0 auto;">
+  <h2>Simple RT Pilot — local test runner</h2>
+  <form id="selector-form">
+    <label style="display:block; margin: 16px 0 8px;">
+      group_index:
+      <input type="number" id="group-index-input" value="1" min="1" max="24" style="width: 60px;">
+      <span style="color: #666; font-size: 90%;">(recorded with data; reserved for future counterbalancing)</span>
+    </label>
+    <button type="submit" style="padding: 8px 16px; margin-top: 12px;">Start</button>
+  </form>
+</div>
+<div id="jspsych-target"></div>
+
+<!-- Attention Check Plugin (local stub for testing) -->
+<script>
+var jsPsychAttentionCheckRdoc = (function (jspsych) {
+  "use strict";
+
+  class AttentionCheckPlugin {
+    constructor(jsPsych) {
+      this.jsPsych = jsPsych;
+    }
+
+    trial(display_element, trial) {
+      var questionHTML = typeof trial.question === 'function' ? trial.question() : trial.question;
+      var keyAnswer = typeof trial.key_answer === 'function' ? trial.key_answer() : trial.key_answer;
+
+      display_element.innerHTML = '<div class="centerbox">' + questionHTML + '</div>';
+
+      var plugin = this;
+      var keyListener = this.jsPsych.pluginAPI.getKeyboardResponse({
+        callback_function: function (info) {
+          var charCode = info.key.toUpperCase().charCodeAt(0);
+          var correct = charCode === keyAnswer;
+          display_element.innerHTML = '';
+          plugin.jsPsych.finishTrial({
+            rt: info.rt,
+            response: info.key,
+            correct: correct,
+          });
+        },
+        valid_responses: 'ALL_KEYS',
+        rt_method: 'performance',
+        persist: false,
+        allow_held_key: false,
+      });
+
+      if (trial.trial_duration) {
+        this.jsPsych.pluginAPI.setTimeout(function () {
+          plugin.jsPsych.pluginAPI.cancelAllKeyboardResponses();
+          display_element.innerHTML = '';
+          plugin.jsPsych.finishTrial({ rt: null, response: null, correct: false });
+        }, trial.trial_duration);
+      }
+    }
+  }
+
+  AttentionCheckPlugin.info = {
+    name: 'attention-check-rdoc',
+    parameters: {
+      question:            { type: jspsych.ParameterType.FUNCTION, default: undefined },
+      key_answer:          { type: jspsych.ParameterType.FUNCTION, default: undefined },
+      response_ends_trial: { type: jspsych.ParameterType.BOOL, default: true },
+      trial_duration:      { type: jspsych.ParameterType.INT, default: null },
+      timing_post_trial:   { type: jspsych.ParameterType.INT, default: 0 },
+    },
+  };
+
+  return AttentionCheckPlugin;
+})(jsPsychModule);
+</script>
+
+<!-- Shim globals that the expfactory platform normally provides -->
+<script>
+window.efVars = { group_index: 1 };
+window.dataSync = function () { console.log('[dataSync] no-op locally'); };
+function addID(id) { return function (data) { data.exp_id = id; }; }
+function getDisplayElement() { return 'jspsych-target'; }
+</script>
+
+<!-- Load experiment (defines variables, functions, init, timeline) -->
+<script src="experiment.js"></script>
+
+<!-- Bootstrap: override image path to local, init jsPsych, run -->
+<script>
+document.getElementById('selector-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var gi = parseInt(document.getElementById('group-index-input').value, 10) || 1;
+  document.getElementById('task-selector').style.display = 'none';
+
+  // Update group_index before experiment.js consumes it via efVars
+  window.efVars = { group_index: gi };
+  if (typeof group_index !== 'undefined') group_index = gi;
+
+  // Point images at the local images/ folder
+  pathSource = 'images/';
+  preFileType = "<img class='center' src='" + pathSource;
+  postFileType = ".png'>";
+  images = [pathSource + 'triangle.png'];
+
+  var jsPsych = initJsPsych({
+    display_element: 'jspsych-target',
+    on_finish: function () {
+      jsPsych.data.displayData();
+    },
+  });
+  window.jsPsych = jsPsych;
+
+  simple_rt_pilot_init();
+  jsPsych.run(simple_rt_pilot_experiment);
+});
+</script>
+</body>
+</html>

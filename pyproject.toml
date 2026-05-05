@@ -1,0 +1,23 @@
+[project]
+name = "simple-rt-pilot-tests"
+version = "0.1.0"
+description = "Test utilities for the simple RT pilot experiment."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ipykernel>=6.29.5",
+    "ipython>=8.32.0",
+    "pytest>=8.3.4",
+]
+
+[tool.ruff]
+extend-include = ["*.ipynb"]
+
+[tool.ruff.format]
+quote-style = "single"
+
+[tool.ruff.lint]
+extend-select = ["E501", "W", "N", "R", "I"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

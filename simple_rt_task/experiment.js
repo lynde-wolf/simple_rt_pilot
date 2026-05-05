@@ -587,3 +587,13 @@ simple_rt_pilot_experiment.push(exitFullscreen);
 // Retain the init function as a no-op for backward compatibility with
 // the local index.html runner (which still calls it before jsPsych.run).
 var simple_rt_pilot_init = function () {};
+
+// Expose to window so expfactory's runtime can find the timeline by
+// name regardless of how it loads experiment.js (script tag vs IIFE
+// wrapper vs module). Deployed expfactory experiments achieve this
+// by declaring the variable WITHOUT `var` (implicit global); we keep
+// `var` for cleanliness and attach explicitly here.
+if (typeof window !== 'undefined') {
+  window.simple_rt_pilot_experiment = simple_rt_pilot_experiment;
+  window.simple_rt_pilot_init = simple_rt_pilot_init;
+}

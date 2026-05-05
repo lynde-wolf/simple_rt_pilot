@@ -535,37 +535,55 @@ function installGlobalKeyLogger() {
 /* ************************************ */
 /*         Experiment Timeline          */
 /* ************************************ */
+// Build the timeline at module load so expfactory's runtime, which calls
+// jsPsych.run(<exp_id>_experiment) without invoking any init function,
+// receives a populated array. Side effects that need a live jsPsych
+// instance (image preload, addProperties) are wrapped in a setup trial
+// pushed at the head of the timeline.
+
 var simple_rt_pilot_experiment = [];
-var simple_rt_pilot_init = () => {
-  jsPsych.pluginAPI.preloadImages(images);
-  installGlobalKeyLogger();
 
-  jsPsych.data.addProperties({
-    group_index: group_index,
-    block_order: 'shape_rt',
-  });
-
-  simple_rt_pilot_experiment.push(fullscreen);
-  simple_rt_pilot_experiment.push(botFingerprintTrial);
-
-  // Practice: Shape simple RT (triangle + spacebar)
-  simple_rt_pilot_experiment.push({
-    timeline: [feedbackInstructBlock, shapeRtInstructionsBlock],
-  });
-  simple_rt_pilot_experiment.push(shapeRtPracticeNode);
-
-  simple_rt_pilot_experiment.push(testKeyReminderBlock);
-
-  // Switch stage to 'test' before the test node runs.
-  simple_rt_pilot_experiment.push({
-    type: jsPsychCallFunction,
-    func: function () { expStage = 'test'; },
-  });
-
-  // Test: 3 blocks of 60 trials
-  simple_rt_pilot_experiment.push(shapeRtTestNode);
-
-  simple_rt_pilot_experiment.push(postTaskBlock);
-  simple_rt_pilot_experiment.push(endBlock);
-  simple_rt_pilot_experiment.push(exitFullscreen);
+var simpleRtPilotSetupBlock = {
+  type: jsPsychCallFunction,
+  func: function () {
+    if (typeof jsPsych !== 'undefined' && jsPsych.pluginAPI && jsPsych.pluginAPI.preloadImages) {
+      jsPsych.pluginAPI.preloadImages(images);
+    }
+    installGlobalKeyLogger();
+    if (typeof jsPsych !== 'undefined' && jsPsych.data && jsPsych.data.addProperties) {
+      jsPsych.data.addProperties({
+        group_index: group_index,
+        block_order: 'shape_rt',
+      });
+    }
+  },
 };
+
+simple_rt_pilot_experiment.push(simpleRtPilotSetupBlock);
+simple_rt_pilot_experiment.push(fullscreen);
+simple_rt_pilot_experiment.push(botFingerprintTrial);
+
+// Practice: Shape simple RT (triangle + diamond, spacebar for any shape)
+simple_rt_pilot_experiment.push({
+  timeline: [feedbackInstructBlock, shapeRtInstructionsBlock],
+});
+simple_rt_pilot_experiment.push(shapeRtPracticeNode);
+
+simple_rt_pilot_experiment.push(testKeyReminderBlock);
+
+// Switch stage to 'test' before the test node runs.
+simple_rt_pilot_experiment.push({
+  type: jsPsychCallFunction,
+  func: function () { expStage = 'test'; },
+});
+
+// Test: 3 blocks of 60 trials
+simple_rt_pilot_experiment.push(shapeRtTestNode);
+
+simple_rt_pilot_experiment.push(postTaskBlock);
+simple_rt_pilot_experiment.push(endBlock);
+simple_rt_pilot_experiment.push(exitFullscreen);
+
+// Retain the init function as a no-op for backward compatibility with
+// the local index.html runner (which still calls it before jsPsych.run).
+var simple_rt_pilot_init = function () {};

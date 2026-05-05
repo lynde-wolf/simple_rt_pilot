@@ -96,7 +96,7 @@ switch (cmd.fn) {
     };
     break;
   case 'getTimeline': {
-    simple_rt_pilot_init();
+    // Timeline is populated at module load — no init() call required.
     result = {
       length: simple_rt_pilot_experiment.length,
       trialIds: simple_rt_pilot_experiment

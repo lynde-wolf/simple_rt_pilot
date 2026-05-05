@@ -144,7 +144,11 @@ class TestTimeline:
     def timeline(self):
         return call_js('getTimeline')
 
-    def test_timeline_built(self, timeline):
+    def test_timeline_built_at_module_load(self, timeline):
+        # expfactory runs jsPsych.run(<exp_id>_experiment) without calling
+        # any init function, so the timeline must be populated at module
+        # load. This test will catch regressions where construction is
+        # moved back inside an init() function.
         assert timeline['length'] > 0
 
     def test_includes_test_key_reminder(self, timeline):

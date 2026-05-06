@@ -611,7 +611,6 @@ var shapeRtTestNode = {
     }
     feedbackText = '<div class=centerbox><p class=block-text>Please take this time to read your feedback!</p>';
     feedbackText += `<p class=block-text>You have completed ${shapeRtTestCount} out of ${numShapeRtTestBlocks} blocks.</p>`;
-    feedbackText += `<p class=block-text>Go-trial accuracy: ${(m.goAccuracy * 100).toFixed(0)}%. Average go RT: ${m.avgGoRT.toFixed(0)} ms. Star (stop) trials where you pressed: ${(m.stopFA * 100).toFixed(0)}%.</p>`;
     if (m.omissionRate > omissionResponseThresh) feedbackText += `<p class=block-text>Please press the spacebar on every trial that does not have a star.</p>`;
     if (m.avgGoRT > rtThresh) feedbackText += `<p class=block-text>You have been responding too slowly.</p>${speedReminder}`;
     if (m.stopFA >= maxStopFA) feedbackText += `<p class=block-text>You have not been stopping when stars appear. Please try harder to withhold your response when you see a star.</p>`;

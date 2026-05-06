@@ -251,8 +251,8 @@ const getStim = function () {
   return buildShapeHTML(_lastShape);
 };
 const getStopStim = function () {
-  // Centered star overlay sized comparably to the shape.
-  return "<img class='center' style='width:" + TRIANGLE_SIZE_PX + "px;height:" + TRIANGLE_SIZE_PX + "px;' src='" + pathSource + "stopSignal.png'>";
+  // Star surrounds the shape, matching the 490x450 px size used in experiments 1 & 2.
+  return "<img class='center' style='width:490px;height:450px;' src='" + pathSource + "stopSignal.png'>";
 };
 const getCondition = () => _lastCondition;
 const getSSD = () => SSD;

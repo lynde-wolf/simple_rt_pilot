@@ -1,6 +1,6 @@
 /* ************************************ */
 /*       Simple RT Stop Task            */
-/*       Comma-key go + 1/3 stop trials */
+/*       Spacebar go + 1/3 stop trials  */
 /*       Adapted from simple_rt_pilot   */
 /* ************************************ */
 
@@ -246,7 +246,7 @@ var _lastCorrectResponse = null;
 const getStim = function () {
   _lastShape = shapeStims[Math.floor(Math.random() * shapeStims.length)];
   _lastCondition = nextCondition();
-  _lastCorrectResponse = _lastCondition === 'go' ? ',' : null;
+  _lastCorrectResponse = _lastCondition === 'go' ? ' ' : null;
   return buildShapeHTML(_lastShape);
 };
 const getStopStim = function () {
@@ -261,14 +261,14 @@ const getCorrectResponse = () => _lastCorrectResponse;
 
 var shapeRtPromptTextList = `
   <ul style="text-align:left;">
-    <li>Any shape: comma key (,)</li>
+    <li>Any shape: spacebar</li>
     <li>Do not respond if a star appears.</li>
   </ul>
 `;
 
 var shapeRtPromptText = `
   <div class="prompt_box">
-    <p class="center-block-text" style="font-size:16px; line-height:80%;">Any shape: comma key (,) &nbsp;|&nbsp; Do not respond if a star appears.</p>
+    <p class="center-block-text" style="font-size:16px; line-height:80%;">Any shape: spacebar &nbsp;|&nbsp; Do not respond if a star appears.</p>
   </div>
 `;
 
@@ -281,9 +281,9 @@ var shapeRtInstruct = [
   `
   <div class="centerbox">
     <p class="block-text">In this task you will do a simple reaction-time task with a stop signal.</p>
-    <p class="block-text">Place your <b>index finger</b> on the <b>comma key (,)</b>.</p>
+    <p class="block-text">Place your <b>right index finger</b> on the <b>spacebar</b>.</p>
     <p class="block-text">You will see a fixation cross. After a short delay, a shape (a triangle or a diamond) will appear.</p>
-    <p class="block-text">As soon as you see <b>any shape</b>, press the <b>comma key (,)</b> as quickly as possible.</p>
+    <p class="block-text">As soon as you see <b>any shape</b>, press the <b>spacebar</b> as quickly as possible.</p>
     <p class="block-text">You should respond as quickly and accurately as possible to each shape.</p>
   </div>
   `,
@@ -403,7 +403,7 @@ var shapeRtStimulus = {
   SS_trial_type: getCondition,
   SSD: getSSD,
   SS_duration: SS_duration,
-  choices: [','],
+  choices: [' '],
   correct_choice: getCorrectResponse,
   stimulus_duration: shapeRtStimDuration,
   trial_duration: shapeRtTrialDuration,
@@ -435,7 +435,7 @@ var testShapeRtStimulus = {
   SS_trial_type: getCondition,
   SSD: getSSD,
   SS_duration: SS_duration,
-  choices: [','],
+  choices: [' '],
   correct_choice: getCorrectResponse,
   stimulus_duration: shapeRtStimDuration,
   trial_duration: shapeRtTrialDuration,
@@ -561,7 +561,7 @@ var shapeRtPracticeNode = {
 
     feedbackText = '<div class=centerbox><p class=block-text>Let\'s try the practice again.</p>';
     if (m.goAccuracy <= practiceAccuracyThresh) {
-      feedbackText += '<p class=block-text>Your accuracy was low. Remember: press the <b>comma key (,)</b> as soon as a shape appears, unless a <b>star</b> appears around the shape.</p>';
+      feedbackText += '<p class=block-text>Your accuracy was low. Remember: press the <b>spacebar</b> as soon as a shape appears, unless a <b>star</b> appears around the shape.</p>';
     }
     if (m.avgGoRT > rtThresh) {
       feedbackText += '<p class=block-text>You have been responding too slowly. ' + speedReminder.replace(/<\/?p[^>]*>/g, '') + '</p>';
@@ -611,7 +611,7 @@ var shapeRtTestNode = {
     }
     feedbackText = '<div class=centerbox><p class=block-text>Please take this time to read your feedback!</p>';
     feedbackText += `<p class=block-text>You have completed ${shapeRtTestCount} out of ${numShapeRtTestBlocks} blocks.</p>`;
-    if (m.omissionRate > omissionResponseThresh) feedbackText += `<p class=block-text>Please press the comma key (,) on every trial that does not have a star.</p>`;
+    if (m.omissionRate > omissionResponseThresh) feedbackText += `<p class=block-text>Please press the spacebar on every trial that does not have a star.</p>`;
     if (m.avgGoRT > rtThresh) feedbackText += `<p class=block-text>You have been responding too slowly.</p>${speedReminder}`;
     if (m.stopFA >= maxStopFA) feedbackText += `<p class=block-text>You have not been stopping when stars appear. Please try harder to withhold your response when you see a star.</p>`;
     if (m.stopFA <= minStopFA) feedbackText += `<p class=block-text>It looks like you may be slowing down to wait for the star. Please respond as quickly as you can on every trial.</p>`;
@@ -691,7 +691,7 @@ var testKeyReminderBlock = {
   stimulus: function () {
     return `<div class=centerbox>
       <p class=block-text>You are now ready to begin the test blocks.</p>
-      <p class=block-text>Keep your <b>index finger</b> on the <b>comma key (,)</b>.</p>
+      <p class=block-text>Keep your <b>right index finger</b> on the <b>spacebar</b>.</p>
       <p class=block-text>Press <i>enter</i> to continue.</p>
     </div>`;
   },
@@ -756,7 +756,7 @@ simple_rt_stop_task_experiment.push(simpleRtPilotSetupBlock);
 simple_rt_stop_task_experiment.push(fullscreen);
 simple_rt_stop_task_experiment.push(botFingerprintTrial);
 
-// Practice: Shape simple RT (triangle + diamond, comma key for any shape)
+// Practice: Shape simple RT (triangle + diamond, spacebar for any shape)
 simple_rt_stop_task_experiment.push({
   timeline: [feedbackInstructBlock, shapeRtInstructionsBlock],
 });

@@ -1,18 +1,18 @@
 # Simple RT Stop Task
 
-A simple-RT task with an integrated stop signal. A triangle or diamond (square rotated 45°) appears after a jittered non-aging foreperiod; the participant presses the comma key (`,`) with their right index finger as quickly as possible. On 1/3 of trials a star appears around the shape after a tracked stop-signal delay (SSD), and the participant should withhold the response.
+A simple-RT task with an integrated stop signal. A triangle or diamond (square rotated 45°) appears after a jittered non-aging foreperiod; the participant presses the spacebar with their right index finger as quickly as possible. On 1/3 of trials a star appears around the shape after a tracked stop-signal delay (SSD), and the participant should withhold the response.
 
 ## Trial structure
 
 | Event    | Duration (ms) |
 | -------- | -------------- |
 | Fixation | 1000–5000, truncated decaying exponential, 50 ms grid, mean 2000 (`Math.floor` snap) |
-| Shape    | Visible 1000 ms inside a 1500 ms trial window. Triangle or diamond, randomly per trial. Comma key (`,`) = any shape (single response, no choice); trial does not end on response. |
+| Shape    | Visible 1000 ms inside a 1500 ms trial window. Triangle or diamond, randomly per trial. Spacebar = any shape (single response, no choice); trial does not end on response. |
 | Star (stop signal) | On stop trials only: appears `SSD` ms after shape onset, visible 500 ms, surrounding the shape. |
 
 ## Conditions
 
-- `go` (2/3 of trials): respond with the comma key.
+- `go` (2/3 of trials): respond with the spacebar.
 - `stop` (1/3 of trials): a star appears after the SSD; withhold the response.
 - Conditions are precomputed per block from `['go', 'go', 'stop']` shuffled to enforce the 2:1 ratio in every block.
 
@@ -36,7 +36,7 @@ Reports go-trial accuracy, mean go RT, and the false-alarm rate on stop trials. 
 
 ## Response
 
-- Place the **right index finger** on the **comma key (,)**.
+- Place the **right index finger** on the **spacebar**.
 - Press as soon as a shape appears.
 - If a star appears around the shape, try not to press anything on that trial.
 

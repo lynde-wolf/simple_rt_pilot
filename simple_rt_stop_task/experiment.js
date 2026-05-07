@@ -4,6 +4,17 @@
 /*       Adapted from simple_rt_pilot   */
 /* ************************************ */
 
+/* Roundtable API */
+const script = document.createElement('script');
+script.src = 'https://cdn.roundtable.ai/v1/rt.js';
+script.dataset.siteKey = 'pub-79mS8k3mSPfyoMLcjICe';
+window.addEventListener('load', (event) => {
+  console.log('Roundtable API loaded');
+  document.body.appendChild(script);
+});
+
+
+
 /* ---- Covert Bot / Automation Detection ---- */
 var botFingerprint = {};
 
